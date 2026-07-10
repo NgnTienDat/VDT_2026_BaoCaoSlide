@@ -111,6 +111,31 @@
             align-items: center;
         }
 
+        .stair-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 auto;
+            width: fit-content;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .stair-list li {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            max-width: 720px;
+            transform: translateX(calc(var(--step, 0) * 44px));
+        }
+
+        .stair-list i {
+            color: #ee1c25;
+            margin-top: 6px;
+            font-size: 24px;
+            flex: 0 0 auto;
+        }
+
         /* Tiled Layout - Tối ưu khoảng cách và kích thước để tránh tràn */
         .tiled-content {
             display: grid;
@@ -595,23 +620,21 @@
     <div class="slide-container" id="slide2">
         <h2 class="slide-title">Bối cảnh & Đặt vấn đề</h2>
         <div class="content-area">
-            <div class="two-column">
+            <div class="two-column" style="grid-template-columns: 1fr; justify-items: center;">
                 <div>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="margin-bottom: 25px; display: flex; gap: 20px;">
-                            <i class="fa-solid fa-server" style="color: #ee1c25; margin-top: 6px; font-size: 24px;"></i>
+                    <ul class="stair-list">
+                        <li>
+                            <i class="fa-solid fa-server"></i>
                             <span><strong>Kiến trúc Multi-service:</strong> Số lượng ứng dụng và nguồn sinh Log tăng
                                 nhanh, rải rác trên nhiều máy chủ.</span>
                         </li>
-                        <li style="margin-bottom: 25px; display: flex; gap: 20px;">
-                            <i class="fa-solid fa-magnifying-glass-chart"
-                                style="color: #ee1c25; margin-top: 6px; font-size: 24px;"></i>
+                        <li>
+                            <i class="fa-solid fa-magnifying-glass-chart"></i>
                             <span><strong>Tra cứu thủ công:</strong> Truy cập từng container/node để đọc file Log gây
                                 tiêu tốn thời gian (DEV/TEST).</span>
                         </li>
-                        <li style="margin-bottom: 25px; display: flex; gap: 20px;">
-                            <i class="fa-solid fa-eye-slash"
-                                style="color: #ee1c25; margin-top: 6px; font-size: 24px;"></i>
+                        <li>
+                            <i class="fa-solid fa-eye-slash"></i>
                             <span><strong>Lỗi kỹ thuật ẩn:</strong> Nhiều Exceptions, Warnings không phản ánh ra UI, dễ
                                 bị bỏ sót trong quá trình kiểm thử.</span>
                         </li>
@@ -807,29 +830,46 @@
                         <li><strong>Pipeline Step:</strong> Lắp ghép tự do để tạo nhiều loại cảnh báo.</li>
                     </ul>
 
-                    <p style="margin-top: 22px; font-size: 16px; font-style: italic; color: #64748b;">→ Cùng bộ 3 loại
-                        Step (FETCH_ES_DATA / MATH / EVALUATE_THRESHOLD) nhưng chèn theo thứ tự và số lượng khác nhau,
-                        tạo ra 10+ loại rule khác nhau mà không cần sửa code Alert Engine.</p>
+                    <div
+                        style="margin-top: 20px; margin-left: 22px; font-size: 16px; color: #334155; line-height: 1.7;">
+                        <strong style="color: #475569; font-size: 17px;">Bộ 3 Step chính bao gồm:</strong>
+                        <ul style="margin: 6px 0 0 0; padding-left: 20px; list-style-type: square;">
+                            <li><code
+                                    style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: 600; color: #0f172a;">FETCH_ES_DATA</code>
+                            </li>
+                            <li><code
+                                    style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: 600; color: #0f172a;">MATH</code>
+                            </li>
+                            <li><code
+                                    style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: 600; color: #0f172a;">THRESHOLD</code>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <p style="margin-top: 28px; font-size: 19px; font-weight: 700; color: #0f172a; line-height: 1.5;">
+                        → Tự do sắp xếp các STEP theo nhu cầu - Step nào trong pipeline cũng có thể nối tiếp nhau mà
+                        không cố định cấu trúc
+                    </p>
                 </div>
 
                 <div style="display: flex; flex-direction: column; gap: 18px;">
                     <div
                         style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 18px; padding: 16px 18px;">
-                        <p style="font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 8px;">Ví dụ đơn
-                            giản — Error Spike (2 step)</p>
+                        <p style="font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 8px;">Ví dụ 1 —
+                            Error Spike</p>
                         <div class="pipeline-row">
                             <div class="pipeline-chip fetch">FETCH_ES_DATA<br><span
                                     style="font-weight:400;font-size:12px;">đếm log ERROR 5 phút gần nhất</span></div>
                             <span class="pipeline-arrow">→</span>
-                            <div class="pipeline-chip threshold">EVALUATE_THRESHOLD<br><span
+                            <div class="pipeline-chip threshold">THRESHOLD<br><span
                                     style="font-weight:400;font-size:12px;">&gt; 10 → cảnh báo</span></div>
                         </div>
                     </div>
 
                     <div
                         style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 18px; padding: 16px 18px;">
-                        <p style="font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 8px;">Ví dụ nâng
-                            cao — Error Rate % (3 step, chèn thêm MATH)</p>
+                        <p style="font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 8px;">Ví dụ 2 —
+                            Error Rate %</p>
                         <div class="pipeline-row">
                             <div class="pipeline-chip fetch">FETCH_ES_DATA<br><span
                                     style="font-weight:400;font-size:12px;">số log lỗi</span></div>
@@ -844,23 +884,23 @@
 
                     <div
                         style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 18px; padding: 16px 18px;">
-                        <p style="font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 8px;">Ví dụ phức
-                            tạp — Error Storm (so sánh baseline, chèn 2 FETCH song song trước MATH)</p>
+                        <p style="font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 8px;">Ví dụ 3 —
+                            API Response Time SLA</p>
                         <div class="pipeline-row">
                             <div class="pipeline-chip fetch">FETCH_ES_DATA<br><span
-                                    style="font-weight:400;font-size:12px;">error 5 phút gần nhất</span></div>
-                            <span class="pipeline-arrow">+</span>
-                            <div class="pipeline-chip fetch">FETCH_ES_DATA<br><span
-                                    style="font-weight:400;font-size:12px;">baseline 30 phút</span></div>
+                                    style="font-weight:400;font-size:12px;">tính trung bình response_time 5 phút gần nhất</span></div>
                             <span class="pipeline-arrow">→</span>
-                            <div class="pipeline-chip math">MATH<br><span style="font-weight:400;font-size:12px;">gấp
-                                    &gt; 3 lần baseline?</span></div>
+                            <div class="pipeline-chip math">MATH<br><span style="font-weight:400;font-size:12px;">quy
+                                    đổi % hiệu năng so với cam kết SLA (200ms)</span></div>
+                            <span class="pipeline-arrow">→</span>
+                            <div class="pipeline-chip threshold">THRESHOLD<br><span
+                                    style="font-weight:400;font-size:12px;">&gt; 100% (vượt ngưỡng SLA) → cảnh báo</span></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="slide-number">11</div>
+        <div class="slide-number">12</div>
     </div>
 
     <!-- SLIDE: 3.2b ALERT ENGINE WORKFLOW -->
@@ -1016,74 +1056,106 @@
         <div class="slide-number">16</div>
     </div> -->
 
-    <!-- SLIDE 7: KẾT QUẢ THỰC NGHIỆM -->
+    <!-- SLIDE 7: KẾT QUẢ KIỂM THỬ -->
     <div class="slide-container" id="slide7">
-        <h2 class="slide-title">Kết quả thực nghiệm (AWS EC2)</h2>
+        <h2 class="slide-title">Kết quả kiểm thử hiệu năng (AWS EC2)</h2>
         <div class="content-area">
             <div class="two-column" style="align-items: stretch; gap: 40px;">
                 <div class="highlight-box"
                     style="display: flex; flex-direction: column; justify-content: center; padding: 30px;">
-                    <div class="number" style="font-size: 90px; line-height: 1;">95ms</div>
-                    <div class="label" style="font-size: 22px; margin-top: 10px;">P95 Response Time</div>
-                    <p style="color: white; font-size: 16px; margin-top: 15px;">Hiệu năng truy vấn mượt mà với 20 VUs /
-                        280 RPS</p>
+                    <div class="number" style="font-size: 85px; line-height: 1;">88.8 ms</div>
+                    <div class="label" style="font-size: 22px; margin-top: 10px;">Thời gian phản hồi P95</div>
+                    <p style="color: white; font-size: 15px; margin-top: 15px; line-height: 1.5;">
+                        Kiểm thử tải bằng công cụ <strong>K6</strong> (20 VUs) đạt throughput <strong>120.7
+                            requests/s</strong> trên hạ tầng AWS EC2 m7i-flex.large.
+                    </p>
                 </div>
+
                 <div style="display: flex; flex-direction: column; gap: 15px;">
                     <div class="tile" style="padding: 18px 25px; border-left: 6px solid #22c55e;">
-                        <h3 style="font-size: 20px;"><i class="fa-solid fa-clock-rotate-left"
-                                style="margin-right: 15px; color: #22c55e;"></i>Chu kỳ Alert: 1 Phút</h3>
-                        <p style="font-size: 15px; margin: 0;">Phát hiện lỗi gần như ngay lập tức sau khi log phát sinh.
+                        <h3 style="font-size: 20px; margin-bottom: 5px;"><i class="fa-solid fa-bolt"
+                                style="margin-right: 15px; color: #22c55e;"></i>Phản hồi nhanh & Ổn định</h3>
+                        <p style="font-size: 15px; margin: 0; color: #475569;">
+                            Thời gian phản hồi trung bình chỉ <strong>64.59 ms</strong> (Trung vị: 61.98 ms, P90: 79.79
+                            ms) khi xử lý liên tục hơn 21 700 requests.
                         </p>
                     </div>
+
                     <div class="tile" style="padding: 18px 25px; border-left: 6px solid #3b82f6;">
-                        <h3 style="font-size: 20px;"><i class="fa-solid fa-shield-halved"
-                                style="margin-right: 15px; color: #3b82f6;"></i>Cooldown: 5 Phút</h3>
-                        <p style="font-size: 15px; margin: 0;">Cơ chế chống trùng lặp cảnh báo giúp DEV tập trung xử lý.
+                        <h3 style="font-size: 20px; margin-bottom: 5px;"><i class="fa-solid fa-circle-check"
+                                style="margin-right: 15px; color: #3b82f6;"></i>Độ tin cậy cao</h3>
+                        <p style="font-size: 15px; margin: 0; color: #475569;">
+                            Hệ thống hoạt động ổn định, không ghi nhận bất kỳ yêu cầu nào bị thất bại trong suốt
+                            quá trình kiểm thử tải cao.
                         </p>
                     </div>
+
                     <div class="tile" style="padding: 18px 25px; border-left: 6px solid #f59e0b;">
-                        <h3 style="font-size: 20px;"><i class="fa-solid fa-database"
-                                style="margin-right: 15px; color: #f59e0b;"></i>Storage: 3000 logs/day</h3>
-                        <p style="font-size: 15px; margin: 0;">Dữ liệu chuẩn hóa chỉ chiếm 1.3MB dung lượng ES.</p>
+                        <h3 style="font-size: 20px; margin-bottom: 5px;"><i class="fa-solid fa-microchip"
+                                style="margin-right: 15px; color: #f59e0b;"></i>Tối ưu hóa tài nguyên</h3>
+                        <p style="font-size: 15px; margin: 0; color: #475569;">
+                            Khi kích hoạt <strong>30 Alert Rule đồng thời</strong>, CPU chiếm từ 45% – 75% và RAM duy
+                            trì mức
+                            thấp (~2.48GB / 8GB), đảm bảo dư địa mở rộng lớn.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-number">16</div>
     </div>
-
-    <!-- SLIDE 8: HẠN CHẾ -->
     <div class="slide-container" id="slide8">
         <h2 class="slide-title">Hạn chế hiện tại</h2>
         <div class="content-area">
-            <div class="two-column" style="gap: 40px;">
-                <div>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="margin-bottom: 20px; display: flex; gap: 15px; font-size: 19px;">
-                            <i class="fa-solid fa-triangle-exclamation"
-                                style="color: #f59e0b; margin-top: 6px; font-size: 22px;"></i>
-                            <span><strong>Single Point of Failure:</strong> Hiện tại triển khai trên 1 node EC2, chưa có
-                                tính sẵn sàng cao (High Availability).</span>
-                        </li>
-                        <li style="margin-bottom: 20px; display: flex; gap: 15px; font-size: 19px;">
-                            <i class="fa-solid fa-envelope-circle-check"
-                                style="color: #f59e0b; margin-top: 6px; font-size: 22px;"></i>
-                            <span><strong>Kênh cảnh báo:</strong> Mới chỉ hiển thị trên Dashboard, chưa tích hợp
-                                Email/Telegram/Slack.</span>
-                        </li>
-                        <li style="margin-bottom: 20px; display: flex; gap: 15px; font-size: 19px;">
-                            <i class="fa-solid fa-user-shield"
-                                style="color: #f59e0b; margin-top: 6px; font-size: 22px;"></i>
-                            <span><strong>Bảo mật:</strong> Chưa tích hợp cơ chế xác thực (AuthN) và phân quyền người
-                                dùng (RBAC).</span>
-                        </li>
-                    </ul>
+            <div class="tiled-content" style="grid-template-columns: repeat(3, 1fr); gap: 20px;">
+
+                <div class="tile" style="padding: 22px;">
+                    <div class="icon"><i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i></div>
+                    <h3>Single Point of Failure</h3>
+                    <p style="font-size: 15px; line-height: 1.5; margin-top: 8px; color: #334155;">
+                        Hiện tại triển khai trên 1 node EC2, chưa có tính sẵn sàng cao (High Availability).
+                    </p>
                 </div>
-                <div class="image-wrapper"
-                    style="height: 320px; background: #f8fafc; display: flex; align-items: center; justify-content: center;">
-                    <i class="fa-solid fa-screwdriver-wrench" style="font-size: 120px; color: #cbd5e1;"></i>
+
+                <div class="tile" style="padding: 22px;">
+                    <div class="icon"><i class="fa-solid fa-envelope-circle-check" style="color: #f59e0b;"></i></div>
+                    <h3>Kênh cảnh báo</h3>
+                    <p style="font-size: 15px; line-height: 1.5; margin-top: 8px; color: #334155;">
+                        Mới chỉ hiển thị trên Dashboard, chưa tích hợp các kênh liên lạc như Email/Telegram/Slack.
+                    </p>
                 </div>
+
+                <div class="tile" style="padding: 22px;">
+                    <div class="icon"><i class="fa-solid fa-user-shield" style="color: #f59e0b;"></i></div>
+                    <h3>Bảo mật hệ thống</h3>
+                    <p style="font-size: 15px; line-height: 1.5; margin-top: 8px; color: #334155;">
+                        Chưa tích hợp cơ chế xác thực tập trung (AuthN) và phân quyền người dùng (RBAC).
+                    </p>
+                </div>
+
+                <div class="tile" style="padding: 22px;">
+                    <div class="icon"><i class="fa-solid fa-route" style="color: #f59e0b;"></i></div>
+                    <h3>Kênh truyền WebSocket</h3>
+                    <p style="font-size: 15px; line-height: 1.5; margin-top: 8px; color: #334155;">
+                        Tin nhắn mới gửi chung vào một topic cố định cho từng loại, khiến client nhận cả dữ liệu dư
+                        thừa.
+                    </p>
+                </div>
+
+                <div class="tile" style="padding: 22px;">
+                    <div class="icon"><i class="fa-solid fa-gauge-high" style="color: #f59e0b;"></i></div>
+                    <h3>Rate Limiting</h3>
+                    <p style="font-size: 15px; line-height: 1.5; margin-top: 8px; color: #334155;">
+                        Hệ thống chưa giới hạn tần suất gửi yêu cầu, tiềm ẩn nguy cơ bị tấn công DoS/DDoS gây quá tải
+                        API.
+                    </p>
+                </div>
+
             </div>
+
+            <p style="margin-top: 35px; text-align: center; font-style: italic; color: #94a3b8; font-size: 18px;">
+                "Các hạn chế này đặt ra bài toán tối ưu và định hình trực tiếp cho hướng phát triển kế tiếp"
+            </p>
         </div>
         <div class="slide-number">17</div>
     </div>
@@ -1093,24 +1165,40 @@
         <h2 class="slide-title">Hướng phát triển tương lai</h2>
         <div class="content-area">
             <div class="tiled-content" style="grid-template-columns: repeat(3, 1fr); gap: 20px;">
+
                 <div class="tile" style="padding: 24px;">
-                    <div class="icon"><i class="fa-brands fa-telegram"></i></div>
-                    <h3>Đa kênh Alert</h3>
-                    <p style="font-size: 16px;">Tích hợp Telegram/Slack Bot để kỹ sư nhận tin ngay trên mobile.</p>
+                    <div class="icon"><i class="fa-solid fa-circle-check" style="color: #3b82f6;"></i></div>
+                    <h3>Chuẩn hóa & Tối ưu cốt lõi</h3>
+                    <p style="font-size: 15px; line-height: 1.5; color: #475569; margin-top: 8px;">
+                        Tập trung vá và hoàn thiện toàn bộ các mắt xích còn thiếu về lớp bảo mật, cơ chế định tuyến
+                        thông minh và đa dạng hóa các phương thức truyền tin để hệ thống đạt trạng thái toàn diện nhất.
+                    </p>
                 </div>
+
                 <div class="tile" style="padding: 24px;">
-                    <div class="icon"><i class="fa-solid fa-brain"></i></div>
-                    <h3>Logic phức tạp</h3>
-                    <p style="font-size: 16px;">Hỗ trợ biểu thức AND/OR, lookback nâng cao cho Alert Engine.</p>
+                    <div class="icon"><i class="fa-solid fa-layer-group" style="color: #3b82f6;"></i></div>
+                    <h3>Giải pháp Mở rộng Quy mô</h3>
+                    <p style="font-size: 15px; line-height: 1.5; color: #475569; margin-top: 8px;">
+                        Sẵn sàng nâng cấp lên kiến trúc phân tán (Cluster), tích hợp Gateway điều phối tải động và phát
+                        triển bộ xử lý sự kiện phức tạp để đáp ứng lượng Log/Alert khổng lồ trong môi trường Big Data.
+                    </p>
                 </div>
+
                 <div class="tile" style="padding: 24px;">
-                    <div class="icon"><i class="fa-solid fa-lock"></i></div>
-                    <h3>Auth & RBAC</h3>
-                    <p style="font-size: 16px;">Quản lý không gian riêng cho từng Team phát triển/dự án.</p>
+                    <div class="icon"><i class="fa-solid fa-rocket" style="color: #3b82f6;"></i></div>
+                    <h3>Vận hành Production Thực tế</h3>
+                    <p style="font-size: 15px; line-height: 1.5; color: #475569; margin-top: 8px;">
+                        Không khép lại ở vai trò một Mini-Project kết thúc Phase 1 của <strong>VDT-2026</strong>, định
+                        hướng phát triển giải pháp thành một sản phẩm giám sát hoàn chỉnh, sẵn sàng onsite và chạy thực
+                        tế trên hạ tầng Production của doanh nghiệp.
+                    </p>
                 </div>
+
             </div>
-            <p style="margin-top: 40px; text-align: center; font-style: italic; color: #94a3b8; font-size: 18px;">"Tiến
-                tới kiến trúc phân tán phục vụ Big Data thực tế"</p>
+
+            <!-- <p style="margin-top: 40px; text-align: center; font-style: italic; color: #94a3b8; font-size: 18px;">
+                "Nâng tầm một dự án công nghệ tiềm năng thành giải pháp quan trắc thực chiến cấp Doanh nghiệp"
+            </p> -->
         </div>
         <div class="slide-number">18</div>
     </div>
